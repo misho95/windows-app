@@ -33,12 +33,20 @@ const RightClickOptions = ({ coords }: PropsType) => {
 
   return (
     <div
-      className="w-[150px] h-[250px] bg-neutral-100 absolute border-[1px] border-black/20 p-1 flex flex-col"
+      className="w-[150px] h-[250px] bg-neutral-100 absolute border-[1px] border-black/20 p-1 flex flex-col gap-1"
       style={{ top: top, left: left }}
     >
       <RightClickButtons>View</RightClickButtons>
       <RightClickButtons>Sort by</RightClickButtons>
       <RightClickButtons>Refresh</RightClickButtons>
+      <div className="w-full h-[1px] bg-black/20" />
+      <RightClickButtons>Paste</RightClickButtons>
+      <RightClickButtons>Paste shortcut</RightClickButtons>
+      <div className="w-full h-[1px] bg-black/20" />
+      <RightClickButtons>New</RightClickButtons>
+      <div className="w-full h-[1px] bg-black/20" />
+      <RightClickButtons>Display settings</RightClickButtons>
+      <RightClickButtons>Personalize</RightClickButtons>
     </div>
   );
 };
