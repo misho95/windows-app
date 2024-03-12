@@ -129,7 +129,7 @@ const FileRender = ({ data }: PropsType) => {
           <textarea
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
-            className="w-full resize-none text-black focus:outline-none overflow-hidden"
+            className="w-full resize-none text-center text-black focus:outline-none overflow-hidden"
             onKeyDown={handleKeyPress}
           />
         )}
