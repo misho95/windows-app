@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import RightClickButtons from "./right.click.buttons";
 
 type PropsType = {
