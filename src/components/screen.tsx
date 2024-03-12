@@ -1,15 +1,15 @@
-import { ReactNode, useContext, useState } from "react";
-import { CoordsContext, DesktopContext } from "../App";
+import { ReactNode, useState } from "react";
 import RightClickOptions from "./right-click/right.click.options";
 import FileRender from "./file/file.render";
+import { useCoords, useDestkopStore } from "../utils/global.store";
 
 type PropsType = {
   children: ReactNode;
 };
 
 const AppScreen = ({ children }: PropsType) => {
-  const { desktop } = useContext(DesktopContext);
-  const { coords } = useContext(CoordsContext);
+  const { desktop } = useDestkopStore();
+  const { coords } = useCoords();
   const [openRightClick, setOpenRightClick] = useState(false);
   const [coordsSaved, setCoordsSaved] = useState<any>(null);
 

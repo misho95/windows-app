@@ -1,26 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import AppScreen from "./components/screen";
 import WindowsBar from "./components/windows.bar/windows.bar";
-
-export const CoordsContext = createContext<any>(null);
-export const DesktopContext = createContext<any>(null);
+import { useCoords } from "./utils/global.store";
 
 function App() {
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [desktop, setDestkop] = useState<fileType[]>([
-    {
-      id: 0,
-      title: "new folder",
-      type: "folder",
-      position: { x: 0, y: 0 },
-    },
-    {
-      id: 1,
-      title: "new folder 2",
-      type: "folder",
-      position: { x: 0, y: 70 },
-    },
-  ]);
+  const { setCoords } = useCoords();
 
   useEffect(() => {
     const handleWindowMouseMove = (event: any) => {
@@ -37,13 +21,9 @@ function App() {
   }, []);
 
   return (
-    <CoordsContext.Provider value={{ coords }}>
-      <DesktopContext.Provider value={{ desktop, setDestkop }}>
-        <AppScreen>
-          <WindowsBar />
-        </AppScreen>
-      </DesktopContext.Provider>
-    </CoordsContext.Provider>
+    <AppScreen>
+      <WindowsBar />
+    </AppScreen>
   );
 }
 
