@@ -8,7 +8,7 @@ type PropsType = {
 };
 
 const AppScreen = ({ children }: PropsType) => {
-  const { desktop, setDestkop } = useContext(DesktopContext);
+  const { desktop } = useContext(DesktopContext);
   const { coords } = useContext(CoordsContext);
   const [openRightClick, setOpenRightClick] = useState(false);
   const [coordsSaved, setCoordsSaved] = useState<any>(null);
