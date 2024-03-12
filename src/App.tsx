@@ -14,6 +14,12 @@ function App() {
       type: "folder",
       position: { x: 0, y: 0 },
     },
+    {
+      id: 1,
+      title: "new folder 2",
+      type: "folder",
+      position: { x: 0, y: 70 },
+    },
   ]);
 
   useEffect(() => {

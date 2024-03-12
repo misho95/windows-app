@@ -51,12 +51,12 @@ const FileRender = ({ data }: PropsType) => {
       }}
       onMouseUp={() => setDrag(false)}
       style={{ top: data.position.y, left: data.position.x }}
-      className="p-5 border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute w-fit h-fit flex flex-col items-center gap-1"
+      className="w-[80px] h-fit p-[5px] m-[1px] border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute flex flex-col items-center gap-[5px]"
     >
       <div className="bg-yellow-500  p-1 rounded-lg text-white w-fit h-fit">
         {data.type === "folder" ? <Folder /> : null}
       </div>
-      <h3 className="text-xs text-white">{data.title}</h3>
+      <h3 className="text-xs text-white select-none">{data.title}</h3>
     </div>
   );
 };
