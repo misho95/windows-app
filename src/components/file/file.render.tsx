@@ -7,17 +7,26 @@ type PropsType = {
 };
 
 const FileRender = ({ data }: PropsType) => {
+  const [saveCoords, setSaveCoords] = useState<null | { x: number; y: number }>(
+    null
+  );
   const { coords } = useContext(CoordsContext);
   const { desktop, setDestkop } = useContext(DesktopContext);
   const [drag, setDrag] = useState(false);
 
   useEffect(() => {
     if (drag && desktop) {
+      if (!saveCoords) {
+        return;
+      }
       const update = desktop.map((f: fileType) => {
         if (f.id === data.id) {
           return {
             ...f,
-            position: { x: coords.x, y: coords.y },
+            position: {
+              x: coords.x - saveCoords.x,
+              y: coords.y - saveCoords.y,
+            },
           };
         } else {
           return f;
@@ -29,7 +38,9 @@ const FileRender = ({ data }: PropsType) => {
 
   return (
     <div
-      onMouseDown={() => setDrag(true)}
+      onMouseDown={(e) => {
+        setDrag(true), setSaveCoords({ x: e.clientX, y: e.clientY });
+      }}
       onMouseUp={() => setDrag(false)}
       style={{ top: data.position.y, left: data.position.x }}
       className="p-5 border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute w-fit h-fit"
