@@ -36,10 +36,18 @@ const FileRender = ({ data }: PropsType) => {
     }
   }, [coords]);
 
+  const saveCoorsHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    const clickDistanceLeft =
+      e.clientX - e.currentTarget.getBoundingClientRect().left;
+    const clickDistanceTop =
+      e.clientY - e.currentTarget.getBoundingClientRect().top;
+    setSaveCoords({ x: clickDistanceLeft, y: clickDistanceTop });
+  };
+
   return (
     <div
       onMouseDown={(e) => {
-        setDrag(true), setSaveCoords({ x: e.clientX, y: e.clientY });
+        setDrag(true), saveCoorsHandler(e);
       }}
       onMouseUp={() => setDrag(false)}
       style={{ top: data.position.y, left: data.position.x }}
