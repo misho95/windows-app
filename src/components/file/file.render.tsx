@@ -8,6 +8,7 @@ import {
 } from "../../utils/global.store";
 import clsx from "clsx";
 import { useClickAway } from "@uidotdev/usehooks";
+import FileRightClick from "./file.right.click";
 
 type PropsType = {
   data: fileType;
@@ -17,6 +18,7 @@ const FileRender = ({ data }: PropsType) => {
   const [saveCoords, setSaveCoords] = useState<null | { x: number; y: number }>(
     null
   );
+  const [options, setOptions] = useState(false);
   const [edit, setEdit] = useState(false);
   const [editTitle, setEditTitle] = useState<string>(data.title);
   const { coords } = useCoords();
@@ -98,42 +100,54 @@ const FileRender = ({ data }: PropsType) => {
     }
   };
 
+  const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOptions(true);
+  };
+
   return (
     <div
-      ref={ref}
-      onClick={handleClick}
-      onMouseDown={(e) => {
-        setDrag(true), saveCoorsHandler(e);
-      }}
-      onMouseUp={() => setDrag(false)}
+      className="absolute w-[80px] h-fit"
       style={{ top: data.position.y, left: data.position.x }}
-      className={clsx(
-        "w-[80px] h-fit p-[5px] m-[1px] border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute flex flex-col items-center gap-[5px]",
-        {
-          "bg-white/30": active === data.id,
-        }
-      )}
     >
-      <div className="bg-yellow-500  p-1 rounded-lg text-white w-fit h-fit">
-        {data.type === "folder" ? <Folder /> : null}
+      <div
+        onContextMenu={handleRightClick}
+        ref={ref}
+        onClick={handleClick}
+        onMouseDown={(e) => {
+          setDrag(true), saveCoorsHandler(e);
+        }}
+        onMouseUp={() => setDrag(false)}
+        className={clsx(
+          "w-full h-fit p-[5px] m-[1px] border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute flex flex-col items-center gap-[5px]",
+          {
+            "bg-white/30": active === data.id,
+          }
+        )}
+      >
+        <div className="bg-yellow-500  p-1 rounded-lg text-white w-fit h-fit">
+          {data.type === "folder" ? <Folder /> : null}
+        </div>
+        <h3 className="text-xs text-white select-none">
+          {!edit && (
+            <div className="text-center overflow-hidden">
+              {data.title.length > 20
+                ? data.title.slice(0, 20).concat("...")
+                : data.title}
+            </div>
+          )}
+          {edit && (
+            <textarea
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              className="w-full resize-none text-center text-black focus:outline-none overflow-hidden"
+              onKeyDown={handleKeyPress}
+            />
+          )}
+        </h3>
       </div>
-      <h3 className="text-xs text-white select-none">
-        {!edit && (
-          <div className="text-center overflow-hidden">
-            {data.title.length > 20
-              ? data.title.slice(0, 20).concat("...")
-              : data.title}
-          </div>
-        )}
-        {edit && (
-          <textarea
-            value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            className="w-full resize-none text-center text-black focus:outline-none overflow-hidden"
-            onKeyDown={handleKeyPress}
-          />
-        )}
-      </h3>
+      {options && <FileRightClick setOptions={setOptions} />}
     </div>
   );
 };

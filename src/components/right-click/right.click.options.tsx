@@ -1,10 +1,13 @@
+import { useClickAway } from "@uidotdev/usehooks";
 import RightClickButtons from "./right.click.buttons";
+import ButtonSeparator from "./button.separator";
 
 type PropsType = {
   coords: { x: number; y: number };
+  setOpenRightClick: (arg: boolean) => void;
 };
 
-const RightClickOptions = ({ coords }: PropsType) => {
+const RightClickOptions = ({ coords, setOpenRightClick }: PropsType) => {
   const windowHeight = window.innerHeight;
   const windowWidth = window.innerWidth;
 
@@ -31,20 +34,25 @@ const RightClickOptions = ({ coords }: PropsType) => {
   const { top } = returnTopStyle();
   const { left } = returnLeftStyle();
 
+  const ref: any = useClickAway(() => {
+    setOpenRightClick(false);
+  });
+
   return (
     <div
+      ref={ref}
       className="w-[150px] h-[250px] bg-neutral-100 absolute border-[1px] border-black/20 p-1 flex flex-col gap-1"
       style={{ top: top, left: left }}
     >
       <RightClickButtons>View</RightClickButtons>
       <RightClickButtons>Sort by</RightClickButtons>
       <RightClickButtons>Refresh</RightClickButtons>
-      <div className="w-full h-[1px] bg-black/20" />
+      <ButtonSeparator />
       <RightClickButtons>Paste</RightClickButtons>
       <RightClickButtons>Paste shortcut</RightClickButtons>
-      <div className="w-full h-[1px] bg-black/20" />
+      <ButtonSeparator />
       <RightClickButtons>New</RightClickButtons>
-      <div className="w-full h-[1px] bg-black/20" />
+      <ButtonSeparator />
       <RightClickButtons>Display settings</RightClickButtons>
       <RightClickButtons>Personalize</RightClickButtons>
     </div>

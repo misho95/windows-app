@@ -2,6 +2,7 @@ import { ReactNode, useState } from "react";
 import RightClickOptions from "./right-click/right.click.options";
 import FileRender from "./file/file.render";
 import { useCoords, useDestkopStore } from "../utils/global.store";
+import { useClickAway } from "@uidotdev/usehooks";
 
 type PropsType = {
   children: ReactNode;
@@ -22,7 +23,6 @@ const AppScreen = ({ children }: PropsType) => {
   return (
     <div
       onContextMenu={handleRightClick}
-      onClick={() => setOpenRightClick(false)}
       style={{ backgroundImage: "url(/desktop.jpg)" }}
       className="w-full h-screen overflow-hidden relative"
     >
@@ -30,7 +30,12 @@ const AppScreen = ({ children }: PropsType) => {
         return <FileRender key={f.id} data={f} />;
       })}
       {children}
-      {openRightClick && <RightClickOptions coords={coordsSaved} />}
+      {openRightClick && (
+        <RightClickOptions
+          coords={coordsSaved}
+          setOpenRightClick={setOpenRightClick}
+        />
+      )}
     </div>
   );
 };
