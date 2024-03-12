@@ -1,7 +1,11 @@
 import { ReactNode, useState } from "react";
 import RightClickOptions from "./right-click/right.click.options";
 import FileRender from "./file/file.render";
-import { useCoords, useDestkopStore } from "../utils/global.store";
+import {
+  useCoords,
+  useDesktopView,
+  useDestkopStore,
+} from "../utils/global.store";
 
 type PropsType = {
   children: ReactNode;
@@ -12,6 +16,7 @@ const AppScreen = ({ children }: PropsType) => {
   const { coords } = useCoords();
   const [openRightClick, setOpenRightClick] = useState(false);
   const [coordsSaved, setCoordsSaved] = useState<any>(null);
+  const { options } = useDesktopView();
 
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -23,7 +28,9 @@ const AppScreen = ({ children }: PropsType) => {
     <div
       onContextMenu={handleRightClick}
       style={{ backgroundImage: "url(/desktop.jpg)" }}
-      className="w-full h-screen overflow-hidden relative"
+      className={`w-full h-screen overflow-hidden relative ${
+        options.auto ? "flex flex-col flex-wrap justify-start items-start" : ""
+      }`}
     >
       {desktop.map((f: fileType) => {
         return <FileRender key={f.id} data={f} />;

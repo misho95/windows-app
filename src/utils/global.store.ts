@@ -49,3 +49,17 @@ export const useDesktopActiveFolder = create<useDesktopActiveFolderType>(
     clear: () => set({ active: null }),
   })
 );
+
+type useDesktopViewOptionsType = {
+  auto: boolean;
+};
+
+type useDesktopViewType = {
+  options: useDesktopViewOptionsType;
+  setType: (obj: useDesktopViewOptionsType) => void;
+};
+
+export const useDesktopView = create<useDesktopViewType>((set) => ({
+  options: { auto: true },
+  setType: (obj) => set({ options: obj }),
+}));

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   useCoords,
   useDesktopActiveFolder,
+  useDesktopView,
   useDestkopStore,
 } from "../../utils/global.store";
 import clsx from "clsx";
@@ -17,13 +18,15 @@ const FileRender = ({ data }: PropsType) => {
   const [saveCoords, setSaveCoords] = useState<null | { x: number; y: number }>(
     null
   );
-  const [options, setOptions] = useState(false);
+  const [editable, setEditable] = useState(false);
+  const [localOptions, setLocalOptions] = useState(false);
   const [edit, setEdit] = useState(false);
   const [editTitle, setEditTitle] = useState<string>(data.title);
   const { coords } = useCoords();
   const { desktop, setDesktop } = useDestkopStore();
   const [drag, setDrag] = useState(false);
   const { active, setActive, clear } = useDesktopActiveFolder();
+  const { options } = useDesktopView();
   const editInputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -59,10 +62,14 @@ const FileRender = ({ data }: PropsType) => {
   const handleClick = () => {
     if (active !== data.id) {
       setActive(data.id);
+      setEditable(true);
+      setTimeout(() => {
+        setEditable(false);
+      }, 1000);
       return;
     }
 
-    if (active === data.id) {
+    if (active === data.id && editable) {
       setEdit(true);
       setTimeout(() => {
         editInputRef.current?.focus();
@@ -107,11 +114,11 @@ const FileRender = ({ data }: PropsType) => {
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setOptions(true);
+    setLocalOptions(true);
   };
 
   const handleEditInRename = () => {
-    setOptions(false);
+    setLocalOptions(false);
     setEdit(true);
     setTimeout(() => {
       editInputRef.current?.focus();
@@ -121,8 +128,8 @@ const FileRender = ({ data }: PropsType) => {
 
   return (
     <div
-      className="absolute w-[80px] h-fit"
-      style={{ top: data.position.y, left: data.position.x }}
+      className={`${options ? "relative" : "absolute"}  w-[80px] h-[80px]`}
+      style={options ? {} : { top: data.position.y, left: data.position.x }}
     >
       <div
         onContextMenu={handleRightClick}
@@ -161,8 +168,11 @@ const FileRender = ({ data }: PropsType) => {
           )}
         </h3>
       </div>
-      {options && (
-        <FileRightClick setOptions={setOptions} setEdit={handleEditInRename} />
+      {localOptions && (
+        <FileRightClick
+          setOptions={setLocalOptions}
+          setEdit={handleEditInRename}
+        />
       )}
     </div>
   );
