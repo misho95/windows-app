@@ -6,6 +6,7 @@ import {
   useDesktopView,
   useDestkopStore,
 } from "../utils/global.store";
+import { fileType } from "../interfaces/desktop";
 
 type PropsType = {
   children: ReactNode;
@@ -32,8 +33,8 @@ const AppScreen = ({ children }: PropsType) => {
         options.auto ? "flex flex-col flex-wrap justify-start items-start" : ""
       }`}
     >
-      {desktop.map((f: fileType) => {
-        return <FileRender key={f.id} data={f} />;
+      {desktop.map((f: fileType, index) => {
+        return <FileRender key={f.id} data={f} index={index} />;
       })}
       {children}
       {openRightClick && (

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { fileType } from "../interfaces/desktop";
 
 type useCoordsType = {
   coords: {
@@ -31,6 +32,12 @@ export const useDestkopStore = create<useDestkopStoreType>((set) => ({
       title: "new folder 2",
       type: "folder",
       position: { x: 0, y: 70 },
+    },
+    {
+      id: 2,
+      title: "new folder 3",
+      type: "folder",
+      position: { x: 0, y: 140 },
     },
   ],
   setDesktop: (array) => set({ desktop: array }),

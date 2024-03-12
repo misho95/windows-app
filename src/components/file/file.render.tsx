@@ -9,12 +9,14 @@ import {
 import clsx from "clsx";
 import { useClickAway } from "@uidotdev/usehooks";
 import FileRightClick from "./file.right.click";
+import { fileType } from "../../interfaces/desktop";
 
 type PropsType = {
   data: fileType;
+  index: any;
 };
 
-const FileRender = ({ data }: PropsType) => {
+const FileRender = ({ data, index }: PropsType) => {
   const [saveCoords, setSaveCoords] = useState<null | { x: number; y: number }>(
     null
   );
@@ -24,13 +26,13 @@ const FileRender = ({ data }: PropsType) => {
   const [editTitle, setEditTitle] = useState<string>(data.title);
   const { coords } = useCoords();
   const { desktop, setDesktop } = useDestkopStore();
-  const [drag, setDrag] = useState(false);
+  const [localDrag, setLocalDrag] = useState(false);
   const { active, setActive, clear } = useDesktopActiveFolder();
   const { options } = useDesktopView();
   const editInputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (drag && desktop) {
+    if (localDrag && desktop) {
       if (!saveCoords) {
         return;
       }
@@ -126,19 +128,39 @@ const FileRender = ({ data }: PropsType) => {
     }, 100);
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData("index", index);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDragDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    const dragData = e.dataTransfer.getData("index");
+    const newItems = [...desktop];
+    const item = newItems.splice(+dragData, 1)[0];
+    newItems.splice(index, 0, item);
+    setDesktop(newItems);
+  };
+
   return (
     <div
       className={`${options ? "relative" : "absolute"}  w-[80px] h-[80px]`}
       style={options ? {} : { top: data.position.y, left: data.position.x }}
+      draggable
+      onDragStart={(e) => handleDragStart(e)}
+      onDragOver={(e) => handleDragOver(e)}
+      onDrop={handleDragDrop}
     >
       <div
         onContextMenu={handleRightClick}
         ref={ref}
         onClick={handleClick}
         onMouseDown={(e) => {
-          setDrag(true), saveCoorsHandler(e);
+          setLocalDrag(true), saveCoorsHandler(e);
         }}
-        onMouseUp={() => setDrag(false)}
+        onMouseUp={() => setLocalDrag(false)}
         className={clsx(
           "w-full h-fit p-[5px] m-[1px] border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute flex flex-col items-center gap-[5px]",
           {

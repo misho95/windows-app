@@ -2,7 +2,7 @@ type appType = "folder";
 
 type appPosition = { x: number; y: number };
 
-type fileType = {
+export type fileType = {
   id: number;
   title: string;
   type: appType;
