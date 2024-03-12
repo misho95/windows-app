@@ -2,7 +2,6 @@ import { ReactNode, useState } from "react";
 import RightClickOptions from "./right-click/right.click.options";
 import FileRender from "./file/file.render";
 import { useCoords, useDestkopStore } from "../utils/global.store";
-import { useClickAway } from "@uidotdev/usehooks";
 
 type PropsType = {
   children: ReactNode;
