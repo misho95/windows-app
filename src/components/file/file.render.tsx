@@ -1,6 +1,5 @@
 import { Folder } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
-import { CoordsContext, DesktopContext } from "../../App";
+import { useEffect, useRef, useState } from "react";
 import {
   useCoords,
   useDesktopActiveFolder,
@@ -25,6 +24,7 @@ const FileRender = ({ data }: PropsType) => {
   const { desktop, setDesktop } = useDestkopStore();
   const [drag, setDrag] = useState(false);
   const { active, setActive, clear } = useDesktopActiveFolder();
+  const editInputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (drag && desktop) {
@@ -64,6 +64,10 @@ const FileRender = ({ data }: PropsType) => {
 
     if (active === data.id) {
       setEdit(true);
+      setTimeout(() => {
+        editInputRef.current?.focus();
+        editInputRef.current?.select();
+      }, 100);
       return;
     }
   };
@@ -74,8 +78,8 @@ const FileRender = ({ data }: PropsType) => {
         handleTitleChange();
       }
       clear();
-      setEdit(false);
     }
+    setEdit(false);
   });
 
   const handleTitleChange = () => {
@@ -104,6 +108,15 @@ const FileRender = ({ data }: PropsType) => {
     e.preventDefault();
     e.stopPropagation();
     setOptions(true);
+  };
+
+  const handleEditInRename = () => {
+    setOptions(false);
+    setEdit(true);
+    setTimeout(() => {
+      editInputRef.current?.focus();
+      editInputRef.current?.select();
+    }, 100);
   };
 
   return (
@@ -139,6 +152,7 @@ const FileRender = ({ data }: PropsType) => {
           )}
           {edit && (
             <textarea
+              ref={editInputRef}
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
               className="w-full resize-none text-center text-black focus:outline-none overflow-hidden"
@@ -147,7 +161,9 @@ const FileRender = ({ data }: PropsType) => {
           )}
         </h3>
       </div>
-      {options && <FileRightClick setOptions={setOptions} />}
+      {options && (
+        <FileRightClick setOptions={setOptions} setEdit={handleEditInRename} />
+      )}
     </div>
   );
 };

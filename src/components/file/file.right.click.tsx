@@ -4,9 +4,10 @@ import ButtonSeparator from "../right-click/button.separator";
 
 type PropsType = {
   setOptions: (arg: boolean) => void;
+  setEdit: () => void;
 };
 
-const FileRightClick = ({ setOptions }: PropsType) => {
+const FileRightClick = ({ setOptions, setEdit }: PropsType) => {
   const ref: any = useClickAway(() => {
     setOptions(false);
   });
@@ -23,7 +24,7 @@ const FileRightClick = ({ setOptions }: PropsType) => {
       <ButtonSeparator />
       <RightClickButtons>Copy</RightClickButtons>
       <RightClickButtons>Cut</RightClickButtons>
-      <RightClickButtons>Rename</RightClickButtons>
+      <RightClickButtons handler={setEdit}>Rename</RightClickButtons>
       <RightClickButtons>Delete</RightClickButtons>
     </div>
   );
