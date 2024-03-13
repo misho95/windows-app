@@ -2,17 +2,20 @@ import { useState } from "react";
 import RightClickButtons from "../right.click.buttons";
 import ButtonSeparator from "../button.separator";
 import { Check, Dot } from "lucide-react";
-import { useDesktopView } from "../../../utils/global.store";
+import { useDesktopView, useOpenRightClick } from "../../../utils/global.store";
 
 const ViewButton = () => {
   const [show, setShow] = useState(false);
   const { options, setType } = useDesktopView();
+  const { setOpenRightClick } = useOpenRightClick();
 
   const handleShowIcons = () => {
     setType({
       ...options,
       showDesktopIcons: options.showDesktopIcons ? false : true,
     });
+    setShow(false);
+    setOpenRightClick(false);
   };
 
   const handleAutoArange = () => {
@@ -20,6 +23,8 @@ const ViewButton = () => {
       ...options,
       auto: options.auto ? false : true,
     });
+    setShow(false);
+    setOpenRightClick(false);
   };
 
   return (

@@ -14,33 +14,50 @@ export const useCoords = create<useCoordsType>((set) => ({
   setCoords: (obj) => set({ coords: obj }),
 }));
 
+type useOpenRightClickType = {
+  openRightClick: boolean;
+  setOpenRightClick: (arg: boolean) => void;
+};
+
+export const useOpenRightClick = create<useOpenRightClickType>((set) => ({
+  openRightClick: false,
+  setOpenRightClick: (arg) => set({ openRightClick: arg }),
+}));
+
 type useDestkopStoreType = {
   desktop: fileType[];
   setDesktop: (array: fileType[]) => void;
 };
 
+const defaultDesktop: fileType[] = [
+  {
+    id: 0,
+    title: "new folder",
+    type: "folder",
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: 1,
+    title: "new folder 2",
+    type: "folder",
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: 2,
+    title: "new folder 3",
+    type: "folder",
+    position: { x: 0, y: 0 },
+  },
+];
+
+const localDesktop = localStorage.getItem("desktop");
+
 export const useDestkopStore = create<useDestkopStoreType>((set) => ({
-  desktop: [
-    {
-      id: 0,
-      title: "new folder",
-      type: "folder",
-      position: { x: 0, y: 0 },
-    },
-    {
-      id: 1,
-      title: "new folder 2",
-      type: "folder",
-      position: { x: 0, y: 70 },
-    },
-    {
-      id: 2,
-      title: "new folder 3",
-      type: "folder",
-      position: { x: 0, y: 140 },
-    },
-  ],
-  setDesktop: (array) => set({ desktop: array }),
+  desktop: localDesktop ? JSON.parse(localDesktop) : defaultDesktop,
+  setDesktop: (array) => {
+    localStorage.setItem("desktop", JSON.stringify(array)),
+      set({ desktop: array });
+  },
 }));
 
 type useDesktopActiveFolderType = {
@@ -68,7 +85,13 @@ type useDesktopViewType = {
   setType: (obj: useDesktopViewOptionsType) => void;
 };
 
+const localOptions = localStorage.getItem("options");
+
 export const useDesktopView = create<useDesktopViewType>((set) => ({
-  options: { auto: true, showDesktopIcons: true, iconSize: "medium" },
-  setType: (obj) => set({ options: obj }),
+  options: localOptions
+    ? JSON.parse(localOptions)
+    : { auto: true, showDesktopIcons: true, iconSize: "medium" },
+  setType: (obj) => {
+    localStorage.setItem("options", JSON.stringify(obj)), set({ options: obj });
+  },
 }));

@@ -5,6 +5,7 @@ import {
   useCoords,
   useDesktopView,
   useDestkopStore,
+  useOpenRightClick,
 } from "../utils/global.store";
 import { fileType } from "../interfaces/desktop";
 
@@ -15,7 +16,7 @@ type PropsType = {
 const AppScreen = ({ children }: PropsType) => {
   const { desktop } = useDestkopStore();
   const { coords } = useCoords();
-  const [openRightClick, setOpenRightClick] = useState(false);
+  const { openRightClick, setOpenRightClick } = useOpenRightClick();
   const [coordsSaved, setCoordsSaved] = useState<any>(null);
   const { options } = useDesktopView();
 
@@ -30,7 +31,7 @@ const AppScreen = ({ children }: PropsType) => {
       onContextMenu={handleRightClick}
       style={{ backgroundImage: "url(/desktop.jpg)" }}
       className={`w-full h-screen overflow-hidden relative ${
-        options.auto ? "flex flex-col flex-wrap" : ""
+        options.auto ? "flex flex-col flex-wrap content-start pb-[50px]" : ""
       }`}
     >
       {options.showDesktopIcons &&
