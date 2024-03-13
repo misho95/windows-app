@@ -1,6 +1,7 @@
 import { useClickAway } from "@uidotdev/usehooks";
 import RightClickButtons from "./right.click.buttons";
 import ButtonSeparator from "./button.separator";
+import ViewButton from "./buttons/view.button";
 
 type PropsType = {
   coords: { x: number; y: number };
@@ -44,7 +45,7 @@ const RightClickOptions = ({ coords, setOpenRightClick }: PropsType) => {
       className="w-[150px] h-[250px] bg-neutral-100 absolute border-[1px] border-black/20 p-1 flex flex-col gap-1"
       style={{ top: top, left: left }}
     >
-      <RightClickButtons>View</RightClickButtons>
+      <ViewButton />
       <RightClickButtons>Sort by</RightClickButtons>
       <RightClickButtons>Refresh</RightClickButtons>
       <ButtonSeparator />

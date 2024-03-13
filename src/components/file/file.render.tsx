@@ -17,6 +17,7 @@ type PropsType = {
 };
 
 const FileRender = ({ data, index }: PropsType) => {
+  const [undeline, setUnderline] = useState(false);
   const [saveCoords, setSaveCoords] = useState<null | { x: number; y: number }>(
     null
   );
@@ -30,6 +31,10 @@ const FileRender = ({ data, index }: PropsType) => {
   const { active, setActive, clear } = useDesktopActiveFolder();
   const { options } = useDesktopView();
   const editInputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    clear();
+  }, [options.auto]);
 
   useEffect(() => {
     if (localDrag && desktop) {
@@ -62,6 +67,10 @@ const FileRender = ({ data, index }: PropsType) => {
   };
 
   const handleClick = () => {
+    if (options.auto) {
+      return;
+    }
+
     if (active !== data.id) {
       setActive(data.id);
       setEditable(true);
@@ -134,6 +143,12 @@ const FileRender = ({ data, index }: PropsType) => {
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setUnderline(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setUnderline(false);
   };
 
   const handleDragDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -142,15 +157,21 @@ const FileRender = ({ data, index }: PropsType) => {
     const item = newItems.splice(+dragData, 1)[0];
     newItems.splice(index, 0, item);
     setDesktop(newItems);
+    setUnderline(false);
   };
 
   return (
     <div
-      className={`${options ? "relative" : "absolute"}  w-[80px] h-[80px]`}
-      style={options ? {} : { top: data.position.y, left: data.position.x }}
-      draggable
+      className={`${options.auto ? "relative" : "absolute"} ${
+        undeline ? "border-b-[1px] border-white" : ""
+      }  w-[80px] h-[80px]`}
+      style={
+        options.auto ? {} : { top: data.position.y, left: data.position.x }
+      }
+      draggable={options.auto}
       onDragStart={(e) => handleDragStart(e)}
       onDragOver={(e) => handleDragOver(e)}
+      onDragLeave={(e) => handleDragLeave(e)}
       onDrop={handleDragDrop}
     >
       <div
@@ -158,9 +179,9 @@ const FileRender = ({ data, index }: PropsType) => {
         ref={ref}
         onClick={handleClick}
         onMouseDown={(e) => {
-          setLocalDrag(true), saveCoorsHandler(e);
+          !options.auto && setLocalDrag(true), saveCoorsHandler(e);
         }}
-        onMouseUp={() => setLocalDrag(false)}
+        onMouseUp={() => !options.auto && setLocalDrag(false)}
         className={clsx(
           "w-full h-fit p-[5px] m-[1px] border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute flex flex-col items-center gap-[5px]",
           {

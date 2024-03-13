@@ -59,6 +59,8 @@ export const useDesktopActiveFolder = create<useDesktopActiveFolderType>(
 
 type useDesktopViewOptionsType = {
   auto: boolean;
+  showDesktopIcons: boolean;
+  iconSize: "large" | "medium" | "small";
 };
 
 type useDesktopViewType = {
@@ -67,6 +69,6 @@ type useDesktopViewType = {
 };
 
 export const useDesktopView = create<useDesktopViewType>((set) => ({
-  options: { auto: true },
+  options: { auto: true, showDesktopIcons: true, iconSize: "medium" },
   setType: (obj) => set({ options: obj }),
 }));

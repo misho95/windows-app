@@ -30,12 +30,13 @@ const AppScreen = ({ children }: PropsType) => {
       onContextMenu={handleRightClick}
       style={{ backgroundImage: "url(/desktop.jpg)" }}
       className={`w-full h-screen overflow-hidden relative ${
-        options.auto ? "flex flex-col flex-wrap justify-start items-start" : ""
+        options.auto ? "flex flex-col flex-wrap" : ""
       }`}
     >
-      {desktop.map((f: fileType, index) => {
-        return <FileRender key={f.id} data={f} index={index} />;
-      })}
+      {options.showDesktopIcons &&
+        desktop.map((f: fileType, index) => {
+          return <FileRender key={f.id} data={f} index={index} />;
+        })}
       {children}
       {openRightClick && (
         <RightClickOptions
