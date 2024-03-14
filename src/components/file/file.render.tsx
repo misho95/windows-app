@@ -68,10 +68,41 @@ const FileRender = ({ data, index }: PropsType) => {
               y: coords.y - saveCoords.y,
             },
           };
+        } else if (f.id !== data.id && active?.includes(f.id)) {
+          return {
+            ...f,
+            position: {
+              x:
+                data.position.x > f.position.x
+                  ? coords.x -
+                    saveCoords.x -
+                    (f.position.x > data.position.x
+                      ? f.position.x - data.position.x
+                      : data.position.x - f.position.x)
+                  : coords.x -
+                    saveCoords.x +
+                    (f.position.x > data.position.x
+                      ? f.position.x - data.position.x
+                      : data.position.x - f.position.x),
+              y:
+                data.position.y > f.position.y
+                  ? coords.y -
+                    saveCoords.y -
+                    (f.position.y > data.position.y
+                      ? f.position.y - data.position.y
+                      : data.position.y - f.position.y)
+                  : coords.y -
+                    saveCoords.y +
+                    (f.position.y > data.position.y
+                      ? f.position.y - data.position.y
+                      : data.position.y - f.position.y),
+            },
+          };
         } else {
           return f;
         }
       });
+
       setDesktop(update);
     }
   }, [coords]);
