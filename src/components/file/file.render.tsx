@@ -33,14 +33,24 @@ const FileRender = ({ data, index }: PropsType) => {
   const { options } = useDesktopView();
   const editInputRef = useRef<HTMLTextAreaElement>(null);
   const { setShowSelection } = useShowSelection();
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     clear();
   }, [options.auto]);
 
   useEffect(() => {
+    if (active) {
+      setIsActive(active.includes(data.id));
+    }
+    if (!active) {
+      setIsActive(false);
+    }
+  }, [active]);
+
+  useEffect(() => {
     if (localDrag) {
-      setShowSelection({ coords: null, show: false });
+      setShowSelection({ coords: null, show: false, select: null });
     }
   }, [localDrag]);
 
@@ -74,13 +84,24 @@ const FileRender = ({ data, index }: PropsType) => {
     setSaveCoords({ x: clickDistanceLeft, y: clickDistanceTop });
   };
 
-  const handleClick = () => {
-    if (options.auto) {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.ctrlKey) {
+      if (active) {
+        const isIncludes = active.includes(data.id);
+        if (isIncludes) {
+          const update = active.filter((f) => f !== data.id);
+          setActive(update);
+        } else {
+          setActive([...active, data.id]);
+        }
+      } else {
+        setActive([data.id]);
+      }
       return;
     }
 
-    if (active !== data.id) {
-      setActive(data.id);
+    if (!isActive) {
+      setActive([data.id]);
       setEditable(true);
       setTimeout(() => {
         setEditable(false);
@@ -88,7 +109,7 @@ const FileRender = ({ data, index }: PropsType) => {
       return;
     }
 
-    if (active === data.id && editable) {
+    if (isActive && editable) {
       setEdit(true);
       setTimeout(() => {
         editInputRef.current?.focus();
@@ -98,14 +119,16 @@ const FileRender = ({ data, index }: PropsType) => {
     }
   };
 
-  const ref: any = useClickAway(() => {
-    if (active === data.id) {
-      if (data.title !== editTitle) {
-        handleTitleChange();
+  const ref: any = useClickAway((e: any) => {
+    if (!e.ctrlKey) {
+      if (isActive) {
+        if (data.title !== editTitle) {
+          handleTitleChange();
+        }
+        clear();
       }
-      clear();
+      setEdit(false);
     }
-    setEdit(false);
   });
 
   const handleTitleChange = () => {
@@ -147,7 +170,7 @@ const FileRender = ({ data, index }: PropsType) => {
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("index", index);
-    setShowSelection({ coords: null, show: false });
+    setShowSelection({ coords: null, show: false, select: null });
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -186,7 +209,7 @@ const FileRender = ({ data, index }: PropsType) => {
       <div
         onContextMenu={handleRightClick}
         ref={ref}
-        onClick={handleClick}
+        onClick={(e) => handleClick(e)}
         onMouseDown={(e) => {
           !options.auto && setLocalDrag(true), saveCoorsHandler(e);
         }}
@@ -194,7 +217,7 @@ const FileRender = ({ data, index }: PropsType) => {
         className={clsx(
           "w-full h-fit p-[5px] m-[1px] border-[1px] border-transparent hover:border-white/50 hover:bg-white/20 absolute flex flex-col items-center gap-[5px]",
           {
-            "bg-white/30": active === data.id,
+            "bg-white/30": isActive,
           }
         )}
       >

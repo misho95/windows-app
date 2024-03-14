@@ -5,6 +5,7 @@ import {
   useCoords,
   useDesktopView,
   useDestkopStore,
+  useMultiSelect,
   useOpenRightClick,
   useShowSelection,
 } from "../utils/global.store";
@@ -21,7 +22,6 @@ const AppScreen = ({ children }: PropsType) => {
   const [coordsSaved, setCoordsSaved] = useState<any>(null);
   const { options } = useDesktopView();
   const { showSelection, setShowSelection } = useShowSelection();
-
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setOpenRightClick(true);

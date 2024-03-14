@@ -61,8 +61,8 @@ export const useDestkopStore = create<useDestkopStoreType>((set) => ({
 }));
 
 type useDesktopActiveFolderType = {
-  active: null | number;
-  setActive: (id: number) => void;
+  active: null | number[];
+  setActive: (id: number[]) => void;
   clear: () => void;
 };
 
