@@ -114,3 +114,26 @@ export const useShowSelection = create<useShowSelectionType>((set) => ({
   showSelection: { show: false, coords: null, select: null },
   setShowSelection: (arg) => set({ showSelection: arg }),
 }));
+
+type useOpenFilesAndPined = {
+  openFiles: { type: string }[];
+  pinnedFiles: { type: string; open: boolean }[];
+  setOpenFiles: (newFile: any) => void;
+};
+
+export const useOpenFilesAndPined = create<useOpenFilesAndPined>((set) => ({
+  openFiles: [{ type: "gem" }, { type: "folder" }],
+  pinnedFiles: [{ type: "baby", open: false }],
+  setOpenFiles: (newFile) =>
+    set((state) => ({ openFiles: [...state.openFiles, newFile] })),
+}));
+
+type useActiveBarFileType = {
+  activeFile: string;
+  setActive: (arg: string) => void;
+};
+
+export const useActiveBarFile = create<useActiveBarFileType>((set) => ({
+  activeFile: "folder",
+  setActive: (arg) => set({ activeFile: arg }),
+}));
