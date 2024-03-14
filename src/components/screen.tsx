@@ -28,8 +28,12 @@ const AppScreen = ({ children }: PropsType) => {
     setCoordsSaved({ x: coords.x, y: coords.y });
   };
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (openRightClick) {
+      return;
+    }
+
+    if (e.ctrlKey) {
       return;
     }
 
@@ -37,7 +41,11 @@ const AppScreen = ({ children }: PropsType) => {
     setShowSelection({ select: null, coords: coords, show: true });
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.ctrlKey) {
+      return;
+    }
+
     setShowSelection({
       ...showSelection,
       show: false,
@@ -51,8 +59,8 @@ const AppScreen = ({ children }: PropsType) => {
   return (
     <div
       onContextMenu={handleRightClick}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
+      onMouseDown={(e) => handleMouseDown(e)}
+      onMouseUp={(e) => handleMouseUp(e)}
       style={{ backgroundImage: "url(/desktop.jpg)" }}
       className={`w-full h-screen overflow-hidden relative ${
         options.auto ? "flex flex-col flex-wrap content-start pb-[50px]" : ""
