@@ -1,12 +1,51 @@
-import { useCoords, useShowSelection } from "../../utils/global.store";
+import { useEffect } from "react";
+import {
+  useCoords,
+  useDesktopActiveFolder,
+  useDestkopStore,
+  useShowSelection,
+} from "../../utils/global.store";
 
 const SelectDesktop = () => {
   const { coords } = useCoords();
+  const { desktop } = useDestkopStore();
+  const { setActive } = useDesktopActiveFolder();
 
   const screenWith = window.innerWidth;
   const screenHeight = window.innerHeight;
 
   const { showSelection } = useShowSelection();
+
+  useEffect(() => {
+    if (!showSelection.select) {
+      return;
+    }
+    const selection = showSelection.select;
+
+    const calculateExpandY = Math.abs(selection.start.y - selection.end.y) % 80;
+    const calculateExpandX = Math.abs(selection.start.x - selection.end.x) % 80;
+
+    const findSelectedFiles = desktop.filter((f) => {
+      if (
+        (selection.start.x < selection.end.x &&
+          f.position.y < selection.end.y + calculateExpandY &&
+          f.position.y > selection.start.y - calculateExpandY &&
+          f.position.x < selection.end.x + calculateExpandX &&
+          f.position.x > selection.start.x - calculateExpandX) ||
+        (selection.start.x > selection.end.x &&
+          f.position.y < selection.end.y + calculateExpandY &&
+          f.position.y > selection.start.y - calculateExpandY &&
+          f.position.x > selection.end.x - calculateExpandX &&
+          f.position.x < selection.start.x + calculateExpandX)
+      ) {
+        return f;
+      }
+    });
+
+    const returnOnlyIds = findSelectedFiles.map((f) => f.id);
+
+    setActive(returnOnlyIds);
+  }, [showSelection]);
 
   const returnWith = () => {
     if (!showSelection.coords) {

@@ -42,7 +42,7 @@ const RightClickOptions = ({ coords, setOpenRightClick }: PropsType) => {
   return (
     <div
       ref={ref}
-      className="w-[150px] h-[250px] bg-neutral-100 absolute border-[1px] border-black/20 p-1 flex flex-col gap-1"
+      className="w-[150px] h-[250px] bg-neutral-100 absolute border-[1px] border-black/20 p-1 flex flex-col gap-1 z-40"
       style={{ top: top, left: left }}
     >
       <ViewButton />

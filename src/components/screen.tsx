@@ -22,6 +22,7 @@ const AppScreen = ({ children }: PropsType) => {
   const [coordsSaved, setCoordsSaved] = useState<any>(null);
   const { options } = useDesktopView();
   const { showSelection, setShowSelection } = useShowSelection();
+
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setOpenRightClick(true);
@@ -29,7 +30,12 @@ const AppScreen = ({ children }: PropsType) => {
   };
 
   const handleMouseDown = () => {
-    setShowSelection({ ...showSelection, coords: coords, show: true });
+    if (openRightClick) {
+      return;
+    }
+
+    setCoordsSaved(coords);
+    setShowSelection({ select: null, coords: coords, show: true });
   };
 
   const handleMouseUp = () => {

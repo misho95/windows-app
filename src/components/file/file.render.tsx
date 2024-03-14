@@ -59,6 +59,7 @@ const FileRender = ({ data, index }: PropsType) => {
       if (!saveCoords) {
         return;
       }
+
       const update = desktop.map((f: fileType) => {
         if (f.id === data.id) {
           return {

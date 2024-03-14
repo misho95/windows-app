@@ -28,7 +28,7 @@ const ViewButton = () => {
   };
 
   return (
-    <RightClickButtons>
+    <div className="w-full hover:bg-white text-left">
       <div
         onMouseEnter={() => setShow(true)}
         onMouseLeave={() => setShow(false)}
@@ -74,7 +74,7 @@ const ViewButton = () => {
           </div>
         )}
       </div>
-    </RightClickButtons>
+    </div>
   );
 };
 
