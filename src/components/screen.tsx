@@ -5,7 +5,6 @@ import {
   useCoords,
   useDesktopView,
   useDestkopStore,
-  useMultiSelect,
   useOpenRightClick,
   useShowSelection,
 } from "../utils/global.store";
