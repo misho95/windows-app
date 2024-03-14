@@ -30,7 +30,7 @@ const FullScreenButton = () => {
   return (
     <button
       onClick={toggleFullScreen}
-      className="absolute right-[5px] top-[5px] bg-white/50 rounded-md p-[5px]"
+      className="absolute right-[5px] top-[5px] bg-white/50 rounded-md p-[5px] z-50 select-none"
     >
       {isFullScreen ? "Exit Fullscreen" : "Fullscreen"}
     </button>

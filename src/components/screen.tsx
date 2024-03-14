@@ -6,6 +6,7 @@ import {
   useDesktopView,
   useDestkopStore,
   useOpenRightClick,
+  useShowSelection,
 } from "../utils/global.store";
 import { fileType } from "../interfaces/desktop";
 
@@ -19,6 +20,7 @@ const AppScreen = ({ children }: PropsType) => {
   const { openRightClick, setOpenRightClick } = useOpenRightClick();
   const [coordsSaved, setCoordsSaved] = useState<any>(null);
   const { options } = useDesktopView();
+  const { showSelection, setShowSelection } = useShowSelection();
 
   const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -26,9 +28,26 @@ const AppScreen = ({ children }: PropsType) => {
     setCoordsSaved({ x: coords.x, y: coords.y });
   };
 
+  const handleMouseDown = () => {
+    setShowSelection({ ...showSelection, coords: coords, show: true });
+  };
+
+  const handleMouseUp = () => {
+    setShowSelection({
+      ...showSelection,
+      show: false,
+      select: {
+        start: coordsSaved,
+        end: coords,
+      },
+    });
+  };
+
   return (
     <div
       onContextMenu={handleRightClick}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       style={{ backgroundImage: "url(/desktop.jpg)" }}
       className={`w-full h-screen overflow-hidden relative ${
         options.auto ? "flex flex-col flex-wrap content-start pb-[50px]" : ""

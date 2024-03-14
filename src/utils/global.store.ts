@@ -95,3 +95,22 @@ export const useDesktopView = create<useDesktopViewType>((set) => ({
     localStorage.setItem("options", JSON.stringify(obj)), set({ options: obj });
   },
 }));
+
+type showSelectionType = {
+  show: boolean;
+  coords: { x: number; y: number } | null;
+  select: {
+    start: { x: number; y: number };
+    end: { x: number; y: number };
+  } | null;
+};
+
+type useShowSelectionType = {
+  showSelection: showSelectionType;
+  setShowSelection: (arg: showSelectionType) => void;
+};
+
+export const useShowSelection = create<useShowSelectionType>((set) => ({
+  showSelection: { show: false, coords: null, select: null },
+  setShowSelection: (arg) => set({ showSelection: arg }),
+}));

@@ -7,6 +7,7 @@ import {
   useDestkopStore,
 } from "./utils/global.store";
 import FullScreenButton from "./components/full.screen.button";
+import SelectDesktop from "./components/select-desktop/select-desktop";
 
 function App() {
   const screenHeight = window.innerHeight - 50;
@@ -25,7 +26,7 @@ function App() {
 
   useEffect(() => {
     if (options.auto) {
-      const updatePositions = desktop.reverse().map((f, index) => {
+      const updatePositions = desktop.map((f, index) => {
         const itemSize = returnSize();
 
         const maxItemsPerColumn = Math.floor(screenHeight / itemSize);
@@ -64,6 +65,7 @@ function App() {
     <AppScreen>
       <WindowsBar />
       <FullScreenButton />
+      <SelectDesktop />
     </AppScreen>
   );
 }

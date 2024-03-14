@@ -5,6 +5,7 @@ import {
   useDesktopActiveFolder,
   useDesktopView,
   useDestkopStore,
+  useShowSelection,
 } from "../../utils/global.store";
 import clsx from "clsx";
 import { useClickAway } from "@uidotdev/usehooks";
@@ -31,10 +32,17 @@ const FileRender = ({ data, index }: PropsType) => {
   const { active, setActive, clear } = useDesktopActiveFolder();
   const { options } = useDesktopView();
   const editInputRef = useRef<HTMLTextAreaElement>(null);
+  const { setShowSelection } = useShowSelection();
 
   useEffect(() => {
     clear();
   }, [options.auto]);
+
+  useEffect(() => {
+    if (localDrag) {
+      setShowSelection({ coords: null, show: false });
+    }
+  }, [localDrag]);
 
   useEffect(() => {
     if (localDrag && desktop) {
@@ -139,6 +147,7 @@ const FileRender = ({ data, index }: PropsType) => {
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("index", index);
+    setShowSelection({ coords: null, show: false });
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -164,7 +173,7 @@ const FileRender = ({ data, index }: PropsType) => {
     <div
       className={`${options.auto ? "relative" : "absolute"} ${
         undeline ? "border-b-[1px] border-white" : ""
-      }  w-[80px] h-[80px]`}
+      }  w-[80px] h-[80px] z-40`}
       style={
         options.auto ? {} : { top: data.position.y, left: data.position.x }
       }
