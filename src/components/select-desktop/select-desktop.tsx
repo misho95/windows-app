@@ -20,7 +20,10 @@ const SelectDesktop = () => {
     if (!showSelection.select) {
       return;
     }
+
     const selection = showSelection.select;
+
+    console.log(selection);
 
     const calculateExpandY = Math.abs(selection.start.y - selection.end.y) % 80;
     const calculateExpandX = Math.abs(selection.start.x - selection.end.x) % 80;
@@ -32,9 +35,17 @@ const SelectDesktop = () => {
           f.position.y > selection.start.y - calculateExpandY &&
           f.position.x < selection.end.x + calculateExpandX &&
           f.position.x > selection.start.x - calculateExpandX) ||
+        (f.position.y > selection.end.y - calculateExpandY &&
+          f.position.y < selection.start.y + calculateExpandY &&
+          f.position.x < selection.end.x + calculateExpandX &&
+          f.position.x > selection.start.x - calculateExpandX) ||
         (selection.start.x > selection.end.x &&
           f.position.y < selection.end.y + calculateExpandY &&
           f.position.y > selection.start.y - calculateExpandY &&
+          f.position.x > selection.end.x - calculateExpandX &&
+          f.position.x < selection.start.x + calculateExpandX) ||
+        (f.position.y > selection.end.y + calculateExpandY &&
+          f.position.y < selection.start.y - calculateExpandY &&
           f.position.x > selection.end.x - calculateExpandX &&
           f.position.x < selection.start.x + calculateExpandX)
       ) {

@@ -24,16 +24,16 @@ const WindowsBar = () => {
       <BarButton>
         <Search />
       </BarButton>
-      {pinnedFiles.map((f) => {
+      {pinnedFiles.map((f, index) => {
         return (
-          <BarButton open={f.open} focus={f.type === activeFile}>
+          <BarButton key={index} open={f.open} focus={f.type === activeFile}>
             {f.type === "baby" ? <Baby /> : null}
           </BarButton>
         );
       })}
-      {openFiles.map((f) => {
+      {openFiles.map((f, index) => {
         return (
-          <BarButton open focus={f.type === activeFile}>
+          <BarButton key={index} open focus={f.type === activeFile}>
             {f.type === "folder" ? (
               <Folder />
             ) : f.type === "gem" ? (
